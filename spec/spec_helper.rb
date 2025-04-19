@@ -14,6 +14,7 @@ end
 Bundler.require :tools
 
 require "dry/monads"
+require "http/fake"
 require "kagi/api"
 require "refinements"
 
