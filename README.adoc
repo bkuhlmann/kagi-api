@@ -2,15 +2,26 @@
 :toclevels: 5
 :figure-caption!:
 
+:data_link: link:https://alchemists.io/articles/ruby_data[Data]
+:dry_monads_link: link:https://dry-rb.org/gems/dry-monads[Dry Monads]
+:kagi_link: link:https://kagi.com[Kagi]
+
 = Kagi API
+
+A monadic API client for {kagi_link} privacy focused information. This allows you to access the full Kagi API using a fault tolerant pipeline to yield whole value objects (i.e. {data_link}) for immediate interaction within your own applications.
 
 toc::[]
 
 == Features
 
+* Provides a {kagi_link} API client.
+* Provides full access to the Kagi APIs.
+* Provides a fault tolerant pipeline for API requests and responses.
+
 == Requirements
 
 . link:https://www.ruby-lang.org[Ruby].
+. A {kagi_link} account with an API key.
 
 == Setup
 
@@ -45,6 +56,149 @@ require "kagi/api"
 ----
 
 == Usage
+
+This client provides access to multiple endpoints. Each endpoint will answer either answer a `Success` or `Failure` (as provided by {dry_monads_link}) based on result of the API call. This allows you pattern match in your own code when using each endpoint. Example:
+
+[source,ruby]
+----
+client = Kagi::API::Client.new
+
+case client.fast query: "Ruby"
+  in Success(payload) then puts payload
+  in Failure(response) then puts response
+  else puts "Unknown HTTP response."
+end
+----
+
+See xref:_endpoints[Endpoints] for further details.
+
+=== Configuration
+
+You can configure the client using a block and adjusting the `content_type`, `token`, and/or `uri` settings as desired. For example, you'd only need to supply your Kagi API token (as found via your link:https://kagi.com/settings?p=api[account settings]) to start using the client:
+
+[source,ruby]
+----
+client = Kagi::API::Client.new do |settings| settings.token = "secret" }
+client.fast query: "Ruby"
+----
+
+If you don't configure the client, then the following defaults will be used:
+
+[source,ruby]
+----
+client = Kagi::API::Client.new do |settings|
+  settings.content_type = "application/json"
+  settings.token = nil
+  settings.uri = "https://kagi.com/api/v0"
+end
+----
+
+=== Environment
+
+You can configure the client via the following environment variables. This is handy when you don't want to use block syntax or want fallbacks when no configuration is provided.
+
+* `KAGI_API_CONTENT_TYPE`: Defines the HTTP `Content-Type` header. You shouldn't need to change this. Default: `"application/json"`.
+* `KAGI_API_TOKEN`: Defines your personal key for API access. Default: `nil`.
+* `KAGI_API_URI`: Defines the API URI. Default: `"https://kagi.com/api/v0"`.
+
+=== Endpoints
+
+All endpoints are accessible via the client instance. Each will answer a `Success` or `Failure` result you can pattern match against. Even better, within each result, you'll get a {data_link} object you can immediately interact with. See below to learn more about each endpoint.
+
+==== Enrich News
+
+Message `#enrich_news` to make API requests. Example:
+
+[source,ruby]
+----
+client = Kagi::API.new
+
+client.enrich_news q: "Ruby programming language"
+
+# Success(#<data Kagi::API::Models::Search meta=#<data Kagi::API::Models::Content::Meta id="<redacted>", node="us-west2", duration=577, balance=2.259763>, data=[#<data Kagi::API::Models::Content::Search type=0, rank=nil, title="The Ruby Programming Language (Ruby)", url="https://github.com/ruby/ruby", snippet="For a complete list of ways to install Ruby...", published_at=2025-05-04 09:17:12 UTC, thumbnail=nil>]>)
+
+client.enrich_news
+
+# Failure(#<data Kagi::API::Models::Error meta=#<data Kagi::API::Models::Content::Meta id="<redacted>", node="us-west2", duration=87, balance=2.366512>, error=[#<data Kagi::API::Models::Content::Error code=1, message="Missing q parameter", reference=nil>]>)
+----
+
+See link:https://help.kagi.com/kagi/api/enrich.html[Kagi API Documentation] for further details.
+
+==== Enrich Web
+
+Message `#enrich_web` to make API requests. Example:
+
+[source,ruby]
+----
+client = Kagi::API.new
+
+client.enrich_web q: "Ruby programming language"
+
+# Success(#<data Kagi::API::Models::Search meta=#<data Kagi::API::Models::Content::Meta id="<redacted>", node="us-west2", duration=451, balance=2.257763>, data=[#<data Kagi::API::Models::Content::Search type=0, rank=nil, title="Ruby Programming Language", url="https://www.ruby-lang.org/en/", snippet="There is a vulnerability about Command Injection in RDoc which is bundled in Ruby. There is an XML round-trip vulnerability in REXML gem bundled with Ruby. And there is also an unintentional file creation vulnerability in tempfile library bundled with Ruby on Windows, because it uses tmpdir internally.", published_at=nil, thumbnail=nil>]>)
+
+client.enrich_web
+
+# Failure(#<data Kagi::API::Models::Error meta=#<data Kagi::API::Models::Content::Meta id="<redacted>", node="us-west2", duration=27, balance=2.362512>, error=[#<data Kagi::API::Models::Content::Error code=1, message="Missing q parameter", reference=nil>]>)
+----
+
+See link:https://help.kagi.com/kagi/api/enrich.html[Kagi API Documentation] for further details.
+
+==== Fast
+
+Message `#fast` to make API requests. Example:
+
+[source,ruby]
+----
+client = Kagi::API.new
+
+client.fast query: "Ruby"
+
+# Success(#<data Kagi::API::Models::Fast meta=#<data Kagi::API::Models::Content::Meta id="<redacted>", node="us-west2", duration=2915, balance=2.362512>, data=#<data Kagi::API::Models::Content::Fast output="Ruby is a dynamic, open-source programming language that focuses on simplicity and productivity. It has an elegant syntax that is natural to read and easy to write. Ruby supports multiple programming paradigms, including functional, object-oriented, and imperative. It is also known for its flexible nature, allowing developers to easily modify its parts. ", tokens=1172, references=[]>>)
+
+client.fast
+
+# Failure(#<data Kagi::API::Models::Error meta=#<data Kagi::API::Models::Content::Meta id="<redacted>", node="us-west2", duration=26, balance=2.347512>, error=[#<data Kagi::API::Models::Content::Error code=1, message="Parameter \"query\" is required and must not be empty", reference=nil>]>)
+----
+
+See link:https://help.kagi.com/kagi/api/fastgpt.html[Kagi API Documentation] for further details.
+
+==== Search
+
+Message `#search` to make API requests. Example:
+
+[source,ruby]
+----
+client = Kagi::API.new
+
+client.search q: "Ruby"
+
+# Success(#<data Kagi::API::Models::Search meta=#<data Kagi::API::Models::Content::Meta id="<redacted>", node="us-west2", duration=1225, balance=2.322512>, data=[#<data Kagi::API::Models::Content::Search type=0, rank=nil, title="Ruby Programming Language", url="https://www.ruby-lang.org/en/", snippet="A dynamic, open source programming language with a focus on simplicity and productivity. It has an elegant syntax that is natural to read and easy to write.", published_at=nil, thumbnail=nil>]>)
+
+client.search
+
+# Failure(#<data Kagi::API::Models::Error meta=#<data Kagi::API::Models::Content::Meta id="<redacted>", node="us-west2", duration=27, balance=2.322512>, error=[#<data Kagi::API::Models::Content::Error code=1, message="Missing q parameter", reference=nil>]>)
+----
+
+See link:https://help.kagi.com/kagi/api/search.html[Kagi API Documentation] for further details.
+
+==== Summarize
+
+Message `#summarize` to make API requests. Example:
+
+[source,ruby]
+----
+client = Kagi::API.new
+
+client.summarize url: "https://www.ruby-lang.org/en", summary_type: "summary"
+
+# Success(#<data Kagi::API::Models::Summary meta=#<data Kagi::API::Models::Content::Meta id="<redacted>", node="us-west2", duration=3828, balance=2.261763>, data=#<data Kagi::API::Models::Content::Summary output="The Ruby Programming Language is a dynamic, open-source language designed for simplicity and productivity, featuring an elegant syntax that is easy to read and write. It is well-known for its straightforward \"Hello World!\" program, which requires minimal syntax. The Ruby community actively shares updates, including recent releases such as Ruby 3.5.0-preview1, Ruby 3.4.3, and Ruby 3.3.8, along with security advisories highlighting vulnerabilities like CVE-2025-43857 related to the net-imap gem. \n\nUsers can easily get started with Ruby through resources like \"Try Ruby!\" and \"Ruby in Twenty Minutes.\" The website offers extensive documentation, libraries, and success stories, encouraging participation in a vibrant community through mailing lists, user groups, and issue tracking. Ruby's commitment to user engagement is evident through various community platforms where developers can collaborate and share knowledge. The site also provides multilingual support, making Ruby accessible to a global audience.", tokens=2025>>)
+
+client.summarize
+
+# Failure(#<data Kagi::API::Models::Error meta=#<data Kagi::API::Models::Content::Meta id="<redacted>", node="us-west2", duration=114, balance=2.322512>, error=[#<data Kagi::API::Models::Content::Error code=200, message="We are sorry, this input is not supported. (Invalid Input)", reference=nil>]>)
+----
+
+See link:https://help.kagi.com/kagi/api/summarizer.html[Kagi API Documentation] for further details.
 
 == Development
 
