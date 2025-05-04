@@ -18,5 +18,7 @@ module Kagi
     def self.loader registry = Zeitwerk::Registry
       @loader ||= registry.loaders.find { |loader| loader.tag == "kagi-api" }
     end
+
+    def self.new(&) = Client.new(&)
   end
 end
