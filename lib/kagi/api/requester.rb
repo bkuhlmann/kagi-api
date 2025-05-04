@@ -4,13 +4,11 @@ module Kagi
   module API
     # The low-level object for making basic HTTP requests.
     class Requester
-      include Dependencies[:http]
+      include Dependencies[:settings, :http]
       include Dry::Monads[:result]
 
-      def initialize(settings = Configuration::Loader.new.call, **)
-        super(**)
-        @settings = settings
-
+      def initialize(**)
+        super
         yield settings if block_given?
       end
 
