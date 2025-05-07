@@ -61,7 +61,7 @@ This client provides access to multiple endpoints. Each endpoint will answer eit
 
 [source,ruby]
 ----
-client = Kagi::API::Client.new
+client = Kagi::API.new
 
 case client.fast query: "Ruby"
   in Success(payload) then puts payload
@@ -78,7 +78,7 @@ You can configure the client using a block and adjusting the `content_type`, `to
 
 [source,ruby]
 ----
-client = Kagi::API::Client.new do |settings| settings.token = "secret" }
+client = Kagi::API.new do |settings| settings.token = "secret" }
 client.fast query: "Ruby"
 ----
 
@@ -86,7 +86,7 @@ If you don't configure the client, then the following defaults will be used:
 
 [source,ruby]
 ----
-client = Kagi::API::Client.new do |settings|
+client = Kagi::API.new do |settings|
   settings.content_type = "application/json"
   settings.token = nil
   settings.uri = "https://kagi.com/api/v0"
