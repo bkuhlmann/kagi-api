@@ -18,6 +18,7 @@ module Kagi
 
         include Dry::Monads[:result]
         include Pipeable
+        include Inspectable
 
         def call(**params)
           result = requester.get("search", **params)
