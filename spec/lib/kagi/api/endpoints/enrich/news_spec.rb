@@ -100,4 +100,8 @@ RSpec.describe Kagi::API::Endpoints::Enrich::News do
       end
     end
   end
+
+  describe "#inspect" do
+    it_behaves_like "an inspectable endpoint", described_class.new
+  end
 end

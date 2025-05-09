@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "dry/monads"
+require "inspectable"
 require "pipeable"
 
 module Kagi
@@ -18,6 +19,7 @@ module Kagi
 
         include Dry::Monads[:result]
         include Pipeable
+        include Inspectable[contract: :class, error_contract: :class]
 
         def call(**params)
           result = requester.post("summarize", **params)
