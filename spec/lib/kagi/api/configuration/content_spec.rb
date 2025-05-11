@@ -15,4 +15,14 @@ RSpec.describe Kagi::API::Configuration::Content do
       expect(content.headers).to eq({})
     end
   end
+
+  describe "#inspect" do
+    subject(:content) { described_class[token: "secret"] }
+
+    it "filters token" do
+      expect(content.inspect).to eq(
+        %(#<struct Kagi::API::Configuration::Content content_type=nil, token="[REDACTED]", uri=nil>)
+      )
+    end
+  end
 end
