@@ -19,7 +19,7 @@ end
 
 group :test do
   gem "http-fake", "~> 4.2"
-  gem "refinements", "~> 13.3"
+  gem "refinements", "~> 13.5"
   gem "rspec", "~> 3.13"
 end
 
