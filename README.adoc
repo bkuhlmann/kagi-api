@@ -10,7 +10,7 @@
 
 A monadic API client for {kagi_link} privacy focused information. This allows you to access the full Kagi API using a fault tolerant pipeline to yield whole value objects (i.e. {data_link}) for immediate interaction within your own applications.
 
-⚠️ *Roughly ~2% of funds go to Yandex search results that Kagi uses in their searches. Unfortunately, Yandex is a Russian company that helps fund corrupt propaganda, the killing of Ukrainians, and other despicable acts. I was not aware of this when I wrote this API client which also violates my software license. More can be found link:https://kagifeedback.org/d/5445-reconsider-yandex-integration-due-to-the-geopolitical-status-quo[here].*
+⚠️ *Roughly ~2% of funds go to Yandex search results. Unfortunately, Yandex is a Russian company that helps fund corrupt propaganda, the killing of Ukrainians, and other despicable acts. I was not aware of this when I wrote this API client. More can be found link:https://kagifeedback.org/d/5445-reconsider-yandex-integration-due-to-the-geopolitical-status-quo[here] so you can make an informed decision.*
 
 toc::[]
 
