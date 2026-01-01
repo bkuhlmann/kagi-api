@@ -28,7 +28,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "dry-monads", "~> 1.9"
   spec.add_dependency "http", "~> 5.2"
   spec.add_dependency "infusible", "~> 4.3"
-  spec.add_dependency "initable", "~> 0.4"
+  spec.add_dependency "initable", "~> 1.0"
   spec.add_dependency "inspectable", "~> 0.3"
   spec.add_dependency "pipeable", "~> 1.3"
   spec.add_dependency "zeitwerk", "~> 2.7"
