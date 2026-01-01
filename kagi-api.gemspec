@@ -26,7 +26,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "cogger", "~> 1.2"
   spec.add_dependency "containable", "~> 1.2"
   spec.add_dependency "dry-monads", "~> 1.9"
-  spec.add_dependency "http", "~> 5.2"
+  spec.add_dependency "http", "~> 5.3"
   spec.add_dependency "infusible", "~> 4.3"
   spec.add_dependency "initable", "~> 1.0"
   spec.add_dependency "inspectable", "~> 0.3"
