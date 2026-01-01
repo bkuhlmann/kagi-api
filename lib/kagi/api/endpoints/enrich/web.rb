@@ -20,7 +20,7 @@ module Kagi
 
           include Dry::Monads[:result]
           include Pipeable
-          include Inspectable[contract: :class, error_contract: :class]
+          include Inspectable[contract: :type, error_contract: :type]
 
           def call(**params)
             result = requester.get("enrich/web", **params)
