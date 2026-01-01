@@ -30,7 +30,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "infusible", "~> 5.0"
   spec.add_dependency "initable", "~> 1.0"
   spec.add_dependency "inspectable", "~> 1.0"
-  spec.add_dependency "pipeable", "~> 1.3"
+  spec.add_dependency "pipeable", "~> 2.0"
   spec.add_dependency "zeitwerk", "~> 2.7"
 
   spec.extra_rdoc_files = Dir["README*", "LICENSE*"]
