@@ -27,7 +27,14 @@ RSpec.describe Kagi::API::Requester do
   end
 
   describe "#initialize" do
-    let(:http) { HTTP }
+    before do
+      response = HTTP::Response.new headers: {content_type: "text/html"},
+                                    body: "Not Found",
+                                    status: 404,
+                                    version: 1.0
+
+      allow(http).to receive(:get).and_return response
+    end
 
     it "initializes with block" do
       requester = described_class.new do |settings|
@@ -42,28 +49,24 @@ RSpec.describe Kagi::API::Requester do
   end
 
   describe "#get" do
-    let :http do
-      HTTP::Fake::Client.new do
-        get "/api/v0/summarize" do
-          headers["Content-Type"] = "application/json"
-          status 200
+    before do
+      response = HTTP::Response.new headers: {content_type: "application/json"},
+                                    body: {
+                                      meta: {
+                                        id: "123",
+                                        node: "us-west2",
+                                        ms: 24,
+                                        api_balance: 3.9
+                                      },
+                                      data: {
+                                        output: "Kagi is a company founded in 2018.",
+                                        tokens: 0
+                                      }
+                                    }.to_json,
+                                    status: 200,
+                                    version: 1.0
 
-          <<~JSON
-            {
-              "meta": {
-                "id": "123",
-                "node": "us-west2",
-                "ms": 24,
-                "api_balance": 3.9
-              },
-              "data": {
-                "output": "Kagi is a company founded in 2018.",
-                "tokens": 0
-              }
-            }
-          JSON
-        end
-      end
+      allow(http).to receive(:get).and_return response
     end
 
     it "answers response" do
@@ -78,28 +81,24 @@ RSpec.describe Kagi::API::Requester do
   end
 
   describe "#post" do
-    let :http do
-      HTTP::Fake::Client.new do
-        post "/api/v0/summarize" do
-          headers["Content-Type"] = "application/json"
-          status 200
+    before do
+      response = HTTP::Response.new headers: {content_type: "application/json"},
+                                    body: {
+                                      meta: {
+                                        id: "123",
+                                        node: "us-west2",
+                                        ms: 24,
+                                        api_balance: 3.9
+                                      },
+                                      data: {
+                                        output: "Kagi is a company founded in 2018.",
+                                        tokens: 0
+                                      }
+                                    }.to_json,
+                                    status: 200,
+                                    version: 1.0
 
-          <<~JSON
-            {
-              "meta": {
-                "id": "123",
-                "node": "us-west2",
-                "ms": 24,
-                "api_balance": 3.9
-              },
-              "data": {
-                "output": "Kagi is a company founded in 2018.",
-                "tokens": 0
-              }
-            }
-          JSON
-        end
-      end
+      allow(http).to receive(:post).and_return response
     end
 
     it "answers response" do
