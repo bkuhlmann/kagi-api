@@ -5,7 +5,7 @@ module Kagi
     module Models
       # Models the search payload.
       Search = Data.define :meta, :data do
-        def self.for(**attributes)
+        def self.for **attributes
           new(
             **attributes.merge!(
               meta: Content::Meta.for(**attributes[:meta]),

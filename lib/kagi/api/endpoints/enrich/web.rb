@@ -22,7 +22,7 @@ module Kagi
           include Pipeable
           include Inspectable[contract: :type, error_contract: :type]
 
-          def call(**params)
+          def call **params
             result = requester.get("enrich/web", **params)
 
             case result

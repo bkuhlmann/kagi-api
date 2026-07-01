@@ -6,7 +6,7 @@ module Kagi
       module Content
         # Models fast data.
         Fast = Data.define :output, :tokens, :references do
-          def self.for(**attributes)
+          def self.for **attributes
             new(**attributes, references: attributes[:references].map { Reference[**it] })
           end
         end

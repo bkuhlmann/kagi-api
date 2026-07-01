@@ -5,7 +5,7 @@ module Kagi
     module Models
       # Models the API error.
       Error = Data.define :meta, :error do
-        def self.for(**attributes)
+        def self.for **attributes
           new(
             **attributes.merge!(
               meta: Content::Meta.for(**attributes[:meta]),

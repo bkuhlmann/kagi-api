@@ -8,7 +8,7 @@ module Kagi
 
         # Models error data.
         Error = Data.define :code, :message, :reference do
-          def self.for(key_map: ERROR_MAP, **attributes)
+          def self.for key_map: ERROR_MAP, **attributes
             new(**attributes.transform_keys(key_map))
           end
 

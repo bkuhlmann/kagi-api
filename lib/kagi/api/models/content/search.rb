@@ -8,7 +8,7 @@ module Kagi
 
         # Models search data.
         Search = Data.define :type, :rank, :title, :url, :snippet, :published_at, :thumbnail do
-          def self.for(key_map: SEARCH_MAP, **attributes)
+          def self.for key_map: SEARCH_MAP, **attributes
             new(
               **attributes.transform_keys(key_map),
               thumbnail: (Thumbnail[**attributes[:thumbnail]] if attributes.key? :thumbnail)
@@ -23,7 +23,7 @@ module Kagi
             snippet: nil,
             published_at: nil,
             thumbnail: nil,
-            **attributes
+            **
           )
             super
           end
