@@ -15,7 +15,7 @@ module Kagi
             )
           end
 
-          # rubocop:todo Metrics/ParameterLists
+          # rubocop:todo-next Metrics/ParameterLists
           def initialize(
             rank: nil,
             title: nil,
@@ -27,7 +27,6 @@ module Kagi
           )
             super
           end
-          # rubocop:enable Metrics/ParameterLists
         end
       end
     end
